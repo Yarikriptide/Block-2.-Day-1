@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.24.0"></script>
+    <title>Список студентів</title>
+
+    <style>
+        .highlighted {
+            background-color: rgb(230, 169, 169);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #2F4F4F;
+            color: white;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #008080; 
+            color: white; 
+        }
+        td a {
+            background-color: red;
+            color: white;
+            border-radius: 5px;
+            padding: 5px 10px;
+            text-decoration: none;
+        }
+        .highlighted-text {
+            background-color: rgb(230, 169, 169);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" id="search-input" v-model="search" placeholder="Пошук за прізвищем">
+
+        <form @submit.prevent="addStudent">
+            <input type="url" v-model="newStudent.photo" placeholder="Фото">
+            <input type="text" v-model="newStudent.name" placeholder="ПІБ" required>
+            <select v-model="newStudent.group" placeholder="Група">
+                <option value="РПЗ 20 1/9">RPZ 20 1/9</option>
+                <option value="РПЗ 20 2/9">RPZ 20 2/9</option>
+            </select>
+            <input type="number" v-model="newStudent.mark" placeholder="Оцінка" required>
+            <input type="checkbox" v-model="newStudent.isDonePr">
+            <button type="submit">Додати</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Фото</th>
+                    <th>ПІБ</th>
+                    <th>Група</th>
+                    <th>Оцінка</th>
+                    <th>Практика</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="student in filteredStudents" :key="student._id">
+                    <td>
+                        <img v-if="student.photo" :src="student.photo" alt="Фото студента" width="50">
+                        <img v-else src="" alt="Фото відсутнє" width="50">
+                    </td>
+                    <td><span :class="{ 'highlighted-text': student.highlighted }">{{ student.name }}</span></td>
+                    <td><span :class="{ 'highlighted-text': student.highlighted }">{{ student.group }}</span></td>
+                    <td>{{ student.mark }}</td>
+                    <td>
+                        <input type="checkbox" v-model="student.isDonePr">
+                    </td>
+                    <td>
+                        <a @click="removeStudent(student._id)" href="#">Видалити</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="main.js"></script>
+    </body>
+    
+</html>
